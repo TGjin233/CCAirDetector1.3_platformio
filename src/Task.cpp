@@ -14,6 +14,7 @@ bool updateWeather = false; // 是否需要更新天气
 OneButton button1(BTN1, true);
 OneButton button2(BTN2, true);
 OneButton button3(BTN3, true);
+OneButton bootButton(BOOT_BTN, true);
 // 系统变量
 int mode = OFFLINE_MODE; // 运行模式
 bool buttonEnable = true; // 按键使能
@@ -789,6 +790,69 @@ void btn3LongClick(){
   }
   buttonEnable = true;
 }
+void bootBtnClick(){
+  if(!buttonEnable || modalShowed){
+    return;
+  }
+  Dida();
+  buttonEnable = false;
+  switch(currentPage){
+    case PAGE1:
+      fadeOff();
+      if(mode == ONLINE_MODE){
+        currentPage = PAGE2;
+        drawPage2();
+      }else{
+        currentPage = BONGOCAT;
+        drawBongoCat();
+      }
+      createFadeOnTask();
+      break;
+    case PAGE2:
+      fadeOff();
+      if(mode == ONLINE_MODE){
+        currentPage = PAGE3;
+        drawPage3(true);
+      }else{
+        currentPage = CONFIG;
+        drawConfig();
+      }
+      createFadeOnTask();
+      break;
+    case PAGE3:
+      fadeOff();
+      if(mode == ONLINE_MODE){
+        currentPage = CALENDAR;
+        drawCalendar();
+      }else{
+        currentPage = CONFIG;
+        drawConfig();
+      }
+      createFadeOnTask();
+      break;
+    case CALENDAR:
+      fadeOff();
+      currentPage = BONGOCAT;
+      drawBongoCat();
+      createFadeOnTask();
+      break;
+    case BONGOCAT:
+      fadeOff();
+      currentPage = CONFIG;
+      drawConfig();
+      createFadeOnTask();
+      break;  
+    case CONFIG:
+      fadeOff();
+      currentPage = PAGE1;
+      drawPage1();
+      createFadeOnTask();
+      break;  
+    default:
+      break;
+  }
+  buttonEnable = true;
+}
 void btn1DuringLongPress(){
   if(modalShowed){
     if(configChoosedIndex == OPTION_BRIGHT){
@@ -833,6 +897,8 @@ void btnInit(){
   button2.setDebounceMs(20); //设置消抖时长 
   button3.attachClick(btn3click);
   button3.setDebounceMs(20); //设置消抖时长 
+  bootButton.attachClick(bootBtnClick);
+  bootButton.setDebounceMs(20); //设置消抖时长 
   button1.attachLongPressStart(btn1LongClick);
   button1.setPressMs(1200); //设置长按时间
   button2.attachLongPressStart(btn2LongClick);
@@ -847,6 +913,7 @@ void watchBtn(){
   button1.tick();
   button2.tick();
   button3.tick();
+  bootButton.tick();
 }
 //////////////////////////////////////////////////////////////////////////////////////
 

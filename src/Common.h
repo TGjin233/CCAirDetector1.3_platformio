@@ -67,6 +67,7 @@
 #define BTN1       25 // 按钮1 左移
 #define BTN2       26 // 按钮2 确定
 #define BTN3       27 // 按钮3 右移
+#define BOOT_BTN   0  // BOOT按键（GPIO0）
 #define JW01_SW    12 // JW01开关
 #define TIME_CHECK_INTERVAL   10800 // NTP对时间隔（s） 3小时进行一次对时
 #define UPDATE_WEATHER_INTERVAL   7200 // 更新天气间隔（s） 2小时更新一次天气
