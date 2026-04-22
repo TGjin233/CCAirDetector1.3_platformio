@@ -34,6 +34,14 @@ void tftInit(){
   tft.setRotation(1);
   tft.setSwapBytes(true);
   clk.setSwapBytes(true);
+
+  // ========== 添加LEDC初始化 ==========
+  // 初始化GPIO17为LEDC PWM输出
+  // 通道0, 频率1kHz, 8位分辨率
+  ledcSetup(0, 1000, 8);      // 通道0, 1kHz, 8位
+  ledcAttachPin(BL, 0);        // GPIO17连接到通道0
+  // ===================================
+
   analogWrite(BL, bright); //调节屏幕亮度
   if(backColor == BACK_BLACK){
     backFillColor = 0x0000;
@@ -71,7 +79,7 @@ void drawStartLoadingAnim(){
   clk.fillSprite(backFillColor);
   clk.setTextDatum(CC_DATUM);
   clk.setTextColor(penColor);
-  // clk.drawString("大聪明的二手脑袋",120,25);
+  clk.drawString("大聪明的二手脑袋",120,25);
   for(int i = 0; i <= 160; i++){
     clk.pushSprite(i - 120, 100);
     delay(1);
