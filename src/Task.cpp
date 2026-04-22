@@ -15,7 +15,7 @@ OneButton button1(BTN1, true);
 OneButton button2(BTN2, true);
 OneButton button3(BTN3, true);
 OneButton bootButton(BOOT_BTN, true);
-// 系统变量
+// 系统全局变量
 int mode = OFFLINE_MODE; // 运行模式
 bool buttonEnable = true; // 按键使能
 bool settingChoosed = true; // 选择的是开始配置按键
