@@ -1,4 +1,5 @@
 #include <TFT_eSPI.h>
+#include <stdlib.h>    // 提供 atof()
 #include "common.h"
 #include "PreferencesUtil.h"
 #include "tftUtil.h"
@@ -652,31 +653,31 @@ void drawPage1SZ(int x, int y, int type, int offsetX, int offsetY){
   switch(type){
     case TEM:
       s = temperature;
-      v = temperature.toFloat();
+      v = atof(temperature);
       t = "温度";
       u = "℃";
       break;
     case HUM:
       s = humidity;
-      v = humidity.toFloat();
+      v = atof(humidity);
       t = "相对湿度";
       u = "%RH";
       break;
     case TVOC:
       s = tvoc;
-      v = tvoc.toFloat();
+      v = atof(tvoc);
       t = "tVOC";
       u = "mg/m³";
       break;
     case CH2O:
       s = ch2o;
-      v = ch2o.toFloat();
+      v = atof(ch2o);
       t = "CH2O";
       u = "mg/m³";
       break;
     case CO2:
       s = co2;
-      v = co2.toFloat();
+      v = atof(co2);
       t = "CO2";
       u = "PPM";
       break;  
@@ -714,31 +715,31 @@ void drawPage1BZ(int type, int offsetX, int offsetY){
   switch(type){
     case TEM:
       s = temperature;
-      v = temperature.toFloat();
+      v = atof(temperature);
       t = "温度";
       u = "℃";
       break;
     case HUM:
       s = humidity;
-      v = humidity.toFloat();
+      v = atof(humidity);
       t = "相对湿度";
       u = "%RH";
       break;
     case TVOC:
       s = tvoc;
-      v = tvoc.toFloat();
+      v = atof(tvoc);
       t = "tVOC";
       u = "mg/m³";
       break;
     case CH2O:
       s = ch2o;
-      v = ch2o.toFloat();
+      v = atof(ch2o);
       t = "CH2O";
       u = "mg/m³";
       break;
     case CO2:
       s = co2;
-      v = co2.toFloat();
+      v = atof(co2);
       t = "CO2";
       u = "PPM";
       break;  
@@ -808,11 +809,11 @@ void draw2Page2Sensors(){
   clk.drawString(ch2o, 224, 38);
   clk.drawString(co2, 288, 38);
   clk.unloadFont();
-  clk.fillRoundRect(5, 53, 54, 5, 2, getColor(temperature.toFloat(), TEM));
-  clk.fillRoundRect(69, 53, 54, 5, 2, getColor(humidity.toFloat(), HUM));
-  clk.fillRoundRect(133, 53, 54, 5, 2, getColor(tvoc.toFloat(), TVOC));
-  clk.fillRoundRect(197, 53, 54, 5, 2, getColor(ch2o.toFloat(), CH2O));
-  clk.fillRoundRect(261, 53, 54, 5, 2, getColor(co2.toFloat(), CO2));
+  clk.fillRoundRect(5, 53, 54, 5, 2, getColor(atof(temperature), TEM));
+  clk.fillRoundRect(69, 53, 54, 5, 2, getColor(atof(humidity), HUM));
+  clk.fillRoundRect(133, 53, 54, 5, 2, getColor(atof(tvoc), TVOC));
+  clk.fillRoundRect(197, 53, 54, 5, 2, getColor(atof(ch2o), CH2O));
+  clk.fillRoundRect(261, 53, 54, 5, 2, getColor(atof(co2), CO2));
   clk.pushSprite(0,180);
   clk.deleteSprite();
 }

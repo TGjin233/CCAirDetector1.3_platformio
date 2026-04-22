@@ -11,12 +11,12 @@
 extern enum CurrentPage currentPage;
 extern unsigned long lastRefresh;
 extern bool updateWeather;
-// 数据相关
-extern String tvoc;
-extern String ch2o;
-extern String co2;
-extern String temperature;
-extern String humidity;
+// 数据相关（使用char数组，替代Arduino String）
+extern char tvoc[16];
+extern char ch2o[16];
+extern char co2[16];
+extern char temperature[16];
+extern char humidity[16];
 // 系统变量
 extern bool settingChoosed;
 extern int mode;

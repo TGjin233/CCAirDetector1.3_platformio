@@ -2,6 +2,8 @@
 #include <DFRobot_DHT20.h>
 #include <Ticker.h>
 #include "esp_adc_cal.h"
+#include <stdlib.h>    // 提供 atof()
+#include <string.h>    // 提供 strcmp()
 #include "net.h"
 #include "Task.h"
 #include "tftUtil.h"
@@ -27,14 +29,14 @@ float tmpTempOffset; // 记录临时温度偏移值
 int tmpBright; // 记录临时亮度
 // JW01
 uint8_t packet[9];
-String tvoc = "0.00";
-String ch2o = "0.00";
-String co2 = "0";
+char tvoc[16] = "0.00";
+char ch2o[16] = "0.00";
+char co2[16] = "0";
 int dirtyDataCount;
 // DHT20
 DFRobot_DHT20 dht20;
-String temperature = "0.0";
-String humidity = "0.0";
+char temperature[16] = "0.0";
+char humidity[16] = "0.0";
 // ADC区域
 static esp_adc_cal_characteristics_t *adcChar; // 斜率曲线
 float batteryMin = 2.9; // 电池最小电压
@@ -109,15 +111,18 @@ void getJW01Data(){
       dirtyDataCount = 0;
     }
     if(f_tvoc > 10.0f) f_tvoc-=10.0f;
-    if(tvoc.equals("0.00")){
-      tvoc = String(f_tvoc, 2);
-      ch2o = String(f_ch2o, 2);
-      co2 = String(f_co2, 0);
+    if(strcmp(tvoc, "0.00") == 0){
+      dtostrf(f_tvoc, 4, 2, tvoc);
+      dtostrf(f_ch2o, 4, 2, ch2o);
+      dtostrf(f_co2, 4, 0, co2);
     }else{
       // 取平均值，增加数据平滑性
-      tvoc = String((tvoc.toFloat() + f_tvoc) / 2, 2);
-      ch2o = String((ch2o.toFloat() + f_ch2o) / 2, 2);
-      co2 = String((co2.toFloat() + f_co2) / 2, 0);
+      float tvocAvg = (atof(tvoc) + f_tvoc) / 2;
+      float ch2oAvg = (atof(ch2o) + f_ch2o) / 2;
+      float co2Avg = (atof(co2) + f_co2) / 2;
+      dtostrf(tvocAvg, 4, 2, tvoc);
+      dtostrf(ch2oAvg, 4, 2, ch2o);
+      dtostrf(co2Avg, 4, 0, co2);
     }
     logDebug("TVOC: ");logDebug(tvoc);logDebugln(" mg/m3");
     logDebug("CH2O: ");logDebug(ch2o);logDebugln(" mg/m3");
@@ -127,20 +132,22 @@ void getJW01Data(){
 void getDHTData(){
   float tmp = dht20.getTemperature();
   // Serial.println(tmp);
-  tmp-=tempOffset; 
+  tmp-=tempOffset;
   // Serial.println(tmp);
   float hum = dht20.getHumidity()*100;
   // DHT20温度范围-40 - 80℃，超过80，就是脏数据
   if(tmp > 80.0f){
     return;
   }
-  if(temperature.equals("0.0")){
-    temperature = String(tmp, 1);
-    humidity = String(hum, 1);
+  if(strcmp(temperature, "0.0") == 0){
+    dtostrf(tmp, 4, 1, temperature);
+    dtostrf(hum, 4, 1, humidity);
   }else{
     // 取平均值，增加数据平滑性
-    temperature = String((temperature.toFloat() + tmp) / 2, 1);
-    humidity = String((humidity.toFloat() + hum) / 2, 1);
+    float tempAvg = (atof(temperature) + tmp) / 2;
+    float humAvg = (atof(humidity) + hum) / 2;
+    dtostrf(tempAvg, 4, 1, temperature);
+    dtostrf(humAvg, 4, 1, humidity);
   }
   logDebug("temperature: ");logDebug(temperature);logDebugln("℃");
   logDebug("humidity: ");logDebug(humidity);logDebugln(" %RH");
