@@ -32,6 +32,26 @@
 #include "img/bongoCat/right_down_white.h"
 #include "img/bongoCat/right_up_black.h"
 #include "img/bongoCat/right_up_white.h"
+#include "img/yuhangyuan/yuhangyuan0.h"
+#include "img/yuhangyuan/yuhangyuan0_black.h"
+#include "img/yuhangyuan/yuhangyuan1.h"
+#include "img/yuhangyuan/yuhangyuan1_black.h"
+#include "img/yuhangyuan/yuhangyuan2.h"
+#include "img/yuhangyuan/yuhangyuan2_black.h"
+#include "img/yuhangyuan/yuhangyuan3.h"
+#include "img/yuhangyuan/yuhangyuan3_black.h"
+#include "img/yuhangyuan/yuhangyuan4.h"
+#include "img/yuhangyuan/yuhangyuan4_black.h"
+#include "img/yuhangyuan/yuhangyuan5.h"
+#include "img/yuhangyuan/yuhangyuan5_black.h"
+#include "img/yuhangyuan/yuhangyuan6.h"
+#include "img/yuhangyuan/yuhangyuan6_black.h"
+#include "img/yuhangyuan/yuhangyuan7.h"
+#include "img/yuhangyuan/yuhangyuan7_black.h"
+#include "img/yuhangyuan/yuhangyuan8.h"
+#include "img/yuhangyuan/yuhangyuan8_black.h"
+#include "img/yuhangyuan/yuhangyuan9.h"
+#include "img/yuhangyuan/yuhangyuan9_black.h"
 #include "fonts/name_24.h"
 #include "fonts/projectName_26.h"
 #include "fonts/settingPage_22.h"
@@ -79,7 +99,7 @@ const String nowURL = "/v7/weather/now";  // 实时天气接口
 const String airURL = "/airquality/v1/current/";  // 空气质量接口
 // 页面枚举
 enum CurrentPage{
-  SETTING, PAGE1, PAGE2, PAGE3, CALENDAR, BONGOCAT, CONFIG
+  SETTING, PAGE1, PAGE2, PAGE3, CALENDAR, BONGOCAT, YUHANGYUAN, CONFIG
 };
 // 定义结构体
 typedef struct {

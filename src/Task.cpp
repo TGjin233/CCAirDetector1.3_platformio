@@ -27,6 +27,9 @@ bool modalShowed = false; // 模态框是否已显示
 float tempOffset; // 温度偏移值
 float tmpTempOffset; // 记录临时温度偏移值
 int tmpBright; // 记录临时亮度
+// 太空人动画相关
+int yuhangyuanAnimIndex = 0; // 太空人动画帧索引
+bool yuhangyuanAnimRunning = false; // 太空人动画是否运行
 // JW01
 uint8_t packet[9];
 char tvoc[16] = "0.00";
@@ -298,6 +301,100 @@ void startTickerUpdateWeather(){
 
 
 /////////////////////////////////////// 按键区////////////////////////////////////////
+// 绘制太空人动画帧
+void drawYuhangyuanAnim(){
+  if(currentPage != YUHANGYUAN){
+    yuhangyuanAnimRunning = false;
+    return;
+  }
+  int x = 125, y = 75, w = 70;
+  if(backColor == BACK_BLACK){
+    switch(yuhangyuanAnimIndex){
+      case 0:
+        tft.pushImage(x, y, w, w, yuhangyuan0_black);
+        break;
+      case 1:
+        tft.pushImage(x, y, w, w, yuhangyuan1_black);
+        break;
+      case 2:
+        tft.pushImage(x, y, w, w, yuhangyuan2_black);
+        break;
+      case 3:
+        tft.pushImage(x, y, w, w, yuhangyuan3_black);
+        break;
+      case 4:
+        tft.pushImage(x, y, w, w, yuhangyuan4_black);
+        break;
+      case 5:
+        tft.pushImage(x, y, w, w, yuhangyuan5_black);
+        break;
+      case 6:
+        tft.pushImage(x, y, w, w, yuhangyuan6_black);
+        break;
+      case 7:
+        tft.pushImage(x, y, w, w, yuhangyuan7_black);
+        break;
+      case 8:
+        tft.pushImage(x, y, w, w, yuhangyuan8_black);
+        break;
+      case 9:
+        tft.pushImage(x, y, w, w, yuhangyuan9_black);
+        break;
+      default:
+        yuhangyuanAnimIndex = 9;
+        break;
+    }
+  }else{
+    switch(yuhangyuanAnimIndex){
+      case 0:
+        tft.pushImage(x, y, w, w, yuhangyuan0);
+        break;
+      case 1:
+        tft.pushImage(x, y, w, w, yuhangyuan1);
+        break;
+      case 2:
+        tft.pushImage(x, y, w, w, yuhangyuan2);
+        break;
+      case 3:
+        tft.pushImage(x, y, w, w, yuhangyuan3);
+        break;
+      case 4:
+        tft.pushImage(x, y, w, w, yuhangyuan4);
+        break;
+      case 5:
+        tft.pushImage(x, y, w, w, yuhangyuan5);
+        break;
+      case 6:
+        tft.pushImage(x, y, w, w, yuhangyuan6);
+        break;
+      case 7:
+        tft.pushImage(x, y, w, w, yuhangyuan7);
+        break;
+      case 8:
+        tft.pushImage(x, y, w, w, yuhangyuan8);
+        break;
+      case 9:
+        tft.pushImage(x, y, w, w, yuhangyuan9);
+        break;
+      default:
+        yuhangyuanAnimIndex = 9;
+        break;
+    }
+  }
+  yuhangyuanAnimIndex += 1;
+  if(yuhangyuanAnimIndex == 10){
+    yuhangyuanAnimIndex = 0;
+  }
+}
+// 开始太空人动画
+void startYuhangyuanAnim(){
+  yuhangyuanAnimRunning = true;
+  yuhangyuanAnimIndex = 0;
+}
+// 停止太空人动画
+void stopYuhangyuanAnim(){
+  yuhangyuanAnimRunning = false;
+}
 // 按键方法
 void btn1click(){
   if(!buttonEnable){
@@ -713,6 +810,12 @@ void btn1LongClick(){
       break;
     case BONGOCAT:
       fadeOff();
+      currentPage = YUHANGYUAN;
+      drawYuhangyuan();
+      createFadeOnTask();
+      break;
+    case YUHANGYUAN:
+      fadeOff();
       if(mode == ONLINE_MODE){
         currentPage = CALENDAR;
         drawCalendar();
@@ -782,10 +885,16 @@ void btn3LongClick(){
       break;
     case BONGOCAT:
       fadeOff();
+      currentPage = YUHANGYUAN;
+      drawYuhangyuan();
+      createFadeOnTask();
+      break;
+    case YUHANGYUAN:
+      fadeOff();
       currentPage = CONFIG;
       drawConfig();
       createFadeOnTask();
-      break;  
+      break;
     case CONFIG:
       fadeOff();
       currentPage = PAGE1;
@@ -844,6 +953,12 @@ void bootBtnClick(){
       createFadeOnTask();
       break;
     case BONGOCAT:
+      fadeOff();
+      currentPage = YUHANGYUAN;
+      drawYuhangyuan();
+      createFadeOnTask();
+      break;
+    case YUHANGYUAN:
       fadeOff();
       currentPage = CONFIG;
       drawConfig();

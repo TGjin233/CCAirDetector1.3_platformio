@@ -25,6 +25,9 @@ extern bool voice;
 extern bool loadingAnim;
 extern bool modalShowed;
 extern float tempOffset;
+// 太空人动画相关
+extern int yuhangyuanAnimIndex;
+extern bool yuhangyuanAnimRunning;
 // ADC相关
 extern float batteryVoltage;
 extern int batteryPercent;
@@ -40,6 +43,10 @@ void createDrawLoadingTask(char *text);
 void createADCTask();
 // Ticker
 void startTickerUpdateWeather();
+// 太空人动画相关
+void drawYuhangyuanAnim();
+void startYuhangyuanAnim();
+void stopYuhangyuanAnim();
 
 #endif
 

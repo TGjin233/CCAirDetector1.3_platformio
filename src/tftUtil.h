@@ -82,6 +82,7 @@ void drawConfigOption(int index);
 void exchangeTheme();
 void drawCurrentPage();
 void drawBongoCat();
+void drawYuhangyuan();
 int getTotalDays(int year, int month);
 String week(int tm_wday);
 String monthDay(int tm_mon, int tm_mday);

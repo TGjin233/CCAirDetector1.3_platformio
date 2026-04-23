@@ -1023,6 +1023,25 @@ void drawBongoCat(){
     tft.pushImage(0,0,320,240,bongoCat_white);
   }
 }
+// 绘制太空人页面
+void drawYuhangyuan(){
+  refreshTFT();
+  clk.loadFont(settingPage_22);
+  clk.setTextDatum(CC_DATUM);
+  clk.setTextColor(penColor);
+  clk.createSprite(320, 30);
+  clk.fillSprite(backFillColor);
+  clk.drawString("太空人动画", 160, 15);
+  clk.pushSprite(0, 20);
+  clk.deleteSprite();
+  clk.createSprite(320, 40);
+  clk.fillSprite(backFillColor);
+  clk.drawString("太空人祝你天天开心", 160, 20);
+  clk.pushSprite(0, 50);
+  clk.deleteSprite();
+  clk.unloadFont();
+  startYuhangyuanAnim();
+}
 // 绘制配置网络和恢复出厂的模态框
 void drawModal(String text, bool refresh){
   clk.loadFont(configOption_18);
@@ -1131,7 +1150,10 @@ void drawCurrentPage(){
       break; 
     case BONGOCAT:
       drawBongoCat();
-      break;   
+      break;  
+    case YUHANGYUAN:
+      drawYuhangyuan();
+      break;
     case CONFIG:
       drawConfig();
       break;  

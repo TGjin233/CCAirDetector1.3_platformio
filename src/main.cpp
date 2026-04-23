@@ -18,6 +18,8 @@ https://www.bilibili.com/video/BV1N3JEz4E57/?vd_source=c106ac8c60f1249e356ef02bd
 
 */
 
+unsigned long lastYuhangyuanAnimTime = 0; // 上次播放太空人动画的时间
+const int YUHANGYUAN_ANIM_INTERVAL = 120; // 太空人动画间隔（毫秒），值越大动画越慢
 
 // 联网获取信息失败时，跳至是否离线使用页面
 void step2OffLine(){
@@ -250,6 +252,20 @@ void loop(){
       if(timeClient.isTimeSet() && timeClient.getMinutes() != displayMinute && buttonEnable && monthOffset == 0){
         drawCalendar();
         displayMinute = timeClient.getMinutes();
+      }
+      break;
+    case YUHANGYUAN:
+      // 刷新顶部条
+      if((millis() - lastRefresh) >= 1000 || lastRefresh > millis()){
+        drawTop();
+        lastRefresh = millis();
+      }
+      // 播放太空人动画（带帧率控制）
+      if(yuhangyuanAnimRunning){
+        if(millis() - lastYuhangyuanAnimTime >= YUHANGYUAN_ANIM_INTERVAL){
+          drawYuhangyuanAnim();
+          lastYuhangyuanAnimTime = millis();
+        }
       }
       break;
     case CONFIG:
