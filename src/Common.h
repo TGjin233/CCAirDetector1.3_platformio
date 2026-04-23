@@ -2,6 +2,7 @@
 #define __COMMON_H
 
 #include "LogUtil.h"
+#include <vector>
 #include "img/wea/xue.h"
 #include "img/wea/lei.h"
 #include "img/wea/shachen.h"
@@ -74,7 +75,7 @@
 
 #define DEVELOP_MODE  false
 #define NTP   "ntp5.aliyun.com"
-#define HTTP_CODE_OK  200
+#define HTTP_RET_OK  200
 #define ONLINE_MODE   0
 #define OFFLINE_MODE  1
 #define BACK_BLACK    0

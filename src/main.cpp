@@ -5,6 +5,8 @@
 #include "net.h"
 #include "PreferencesUtil.h"
 #include "tftUtil.h"
+#include "stockAPI.h"
+#include "nowAPI.h"
 
 /**
 CC温湿度仪  版本1.3
@@ -13,7 +15,7 @@ CC温湿度仪  版本1.3
 
 和风天气身份验证改版，导致新申请的和风账号无法顺利获取天气信息，这个版本加入了作者自己编写的库，
 从IDE->项目->导入库->添加.zip库，将作者开源的JwtUtil库安装，然后再net.cpp文件中，替换5个和风相关的内容即可烧录。
-具体更新操作，请参照Dudu时钟这一期的教程，“手把手复刻2.4寸Dudu天气时钟 已适配和风天气JWT认证”，
+具体更新操作，请参照Dudu时钟这一期的教程，"手把手复刻2.4寸Dudu天气时钟 已适配和风天气JWT认证"，
 https://www.bilibili.com/video/BV1N3JEz4E57/?vd_source=c106ac8c60f1249e356ef02bdcc85de7
 
 */
@@ -86,7 +88,7 @@ void setup(){
           // Serial.println(timeClient.getEpochTime() - 8 * 3600);
           if(location.equals("")){ // 没有城市信息
             int cityCode;
-            while(cityCode != HTTP_CODE_OK){
+            while(cityCode != HTTP_RET_OK){
               cityCode = getCityID();
             }
           }
@@ -95,7 +97,7 @@ void setup(){
             // 查询天气
             int weatherCode;
             int weatherTimes = 1;
-            while(weatherCode != HTTP_CODE_OK){
+            while(weatherCode != HTTP_RET_OK){
               if(weatherTimes >= DATA_FAILED_TIMES){
                 logInfoln("网络异常，获取天气信息失败");
                 getDataFailed = true;
@@ -110,14 +112,14 @@ void setup(){
               // 查询空气质量
               int airCode;
               int airTimes = 1;
-              while(airCode != HTTP_CODE_OK){
+              while(airCode != HTTP_RET_OK){
                 if(airTimes >= DATA_FAILED_TIMES){
                   logInfoln("网络异常，获取空气质量信息失败");
                   getDataFailed = true;
                   break;
                 }
                 airCode = getAir();
-                airTimes++;              
+                airTimes++;
               }
               if(getDataFailed){ // 获取天气信息全部失败，跳至是否离线使用页面
                 step2OffLine();
@@ -125,6 +127,10 @@ void setup(){
                 if(queryWeatherSuccess && queryAirSuccess){
                   mode = ONLINE_MODE;
                 }
+                // 获取关注的股票数据
+                fetchWatchedStocks();
+                // 获取全球指数数据
+                fetchGlobalIndex();
                 currentPage = PAGE1;
                 // 关闭加载动画
                 loadingAnim = false;
@@ -137,7 +143,7 @@ void setup(){
                 // 创建屏幕渐显任务
                 createFadeOnTask();
               }
-            }  
+            }
           }
         }
       }
@@ -228,7 +234,7 @@ void loop(){
       if((millis() - lastRefresh) >= 1000 || lastRefresh > millis()){
         draw2Page2Sensors();
         lastRefresh = millis();
-      }     
+      }
       break;
     case PAGE3:
       // 刷新顶部条
@@ -276,7 +282,7 @@ void loop(){
         drawTop();
         lastRefresh = millis();
       }
-      break;  
+      break;
     default:
       break;
   }

@@ -238,7 +238,7 @@ int getCityID(){
   //启动连接并发送HTTP请求
   int httpCode = httpClient.GET();
   // 处理服务器答复
-  if (httpCode == HTTP_CODE_OK) {
+  if (httpCode == HTTP_RET_OK) {
     // 解压Gzip数据流
     int len = httpClient.getSize();
     uint8_t buff[2048] = { 0 };
@@ -284,7 +284,7 @@ int getCityID(){
   if(!flag){
     logInfo("获取城市id错误：");
     logInfoln(String(httpCode));
-    if(httpCode == HTTP_CODE_OK){
+    if(httpCode == HTTP_RET_OK){
       // 关闭加载动画
       loadingAnim = false;
       fadeOff();
@@ -318,7 +318,7 @@ int getWeather(){
   int httpCode = httpClient.GET();
   // Serial.println(ESP.getFreeHeap());
   //如果服务器响应OK则从服务器获取响应体信息并通过串口输出
-  if (httpCode == HTTP_CODE_OK) {
+  if (httpCode == HTTP_RET_OK) {
     // 解压Gzip数据流
     int len = httpClient.getSize();
     uint8_t buff[2048] = { 0 };
@@ -390,7 +390,7 @@ int getAir(){
   //启动连接并发送HTTP请求
   int httpCode = httpClient.GET();  
   //如果服务器响应OK则从服务器获取响应体信息并通过串口输出
-  if (httpCode == HTTP_CODE_OK) {
+  if (httpCode == HTTP_RET_OK) {
     // 解压Gzip数据流
     int len = httpClient.getSize();
     uint8_t buff[2048] = { 0 };
@@ -462,5 +462,3 @@ int getAir(){
 void disconnectWiFi(){
   WiFi.disconnect();
 }
-
-
