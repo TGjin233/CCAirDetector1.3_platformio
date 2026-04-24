@@ -28,6 +28,9 @@ extern float tempOffset;
 // 太空人动画相关
 extern int yuhangyuanAnimIndex;
 extern bool yuhangyuanAnimRunning;
+// 指数页面相关
+extern bool indexPageInitialized;
+extern unsigned long lastIndexRefresh;
 // ADC相关
 extern float batteryVoltage;
 extern int batteryPercent;

@@ -1,5 +1,23 @@
 # TODO 列表
 
+## 当前功能
+
+### ✅ NowAPI 全球指数数据获取
+
+**已实现功能**：
+- ✅ 从 NowAPI 获取全球指数数据（上证指数、深证成指）
+- ✅ 支持多个指数的循环获取
+- ✅ 数据保存到 NVS 非易失性存储
+- ✅ 网络失败时自动加载缓存数据
+- ✅ 开机时获取一次并打印到串口
+
+**数据持久化机制**：
+- 获取成功 → 保存到 NVS
+- 获取失败 → 从 NVS 加载缓存数据
+- 缓存键名：`idx_0_price`、`idx_0_nm` 等
+
+---
+
 ## 明天任务
 
 ### 1. 将 NowAPI 全球指数数据显示到屏幕上
@@ -13,11 +31,7 @@
    - 在 `Common.h` 中添加 `GLOBAL_INDEX` 页面枚举
    - 添加页面切换逻辑
 
-2. **定义显示数据结构**
-   - 在 `nowAPI.h` 中添加 `IndexData globalIndexData` 全局变量
-   - 存储获取到的指数数据
-
-3. **实现屏幕显示函数**
+2. **实现屏幕显示函数**
    ```cpp
    void drawGlobalIndexPage() {
      // 显示上证指数
@@ -32,13 +46,31 @@
    }
    ```
 
-4. **修改按键逻辑**
+3. **修改按键逻辑**
    - 在 `Task.cpp` 中添加页面切换支持
    - 长按按钮切换到 GLOBAL_INDEX 页面
 
-5. **整合数据获取**
-   - `fetchGlobalIndex()` 获取数据后存储到全局变量
-   - 页面刷新时读取并显示
+4. **整合数据获取**
+   - 页面刷新时读取 `globalIndexData[]` 并显示
+
+---
+
+## 添加新指数的方法
+
+修改 `nowAPI.cpp` 中的 `WATCHED_INDICES` 数组：
+
+```cpp
+const char* WATCHED_INDICES[] = {
+  "1010",    // 上证指数
+  "1114",    // 深证成指
+  // 添加更多指数...
+};
+```
+
+**常用指数代码**：
+- 1010 = 上证指数
+- 1114 = 深证成指
+- 其他指数代码请参考 NowAPI 文档
 
 ---
 
@@ -56,6 +88,8 @@
 - **现有页面代码**：`tftUtil.cpp` 中的 `drawPage1()`、`drawPage2()` 函数
 - **页面切换逻辑**：`Task.cpp` 中的 `btn3LongClick()` 函数
 - **颜色定义**：`Common.h` 中的颜色常量
+- **指数数据存储**：`nowAPI.cpp` 中的 `globalIndexData[]`
+- **数据持久化**：`nowAPI.cpp` 中的 `saveIndexToNVS()` 和 `loadIndexFromNVS()`
 
 ---
 

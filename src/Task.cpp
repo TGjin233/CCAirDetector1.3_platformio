@@ -30,6 +30,9 @@ int tmpBright; // 记录临时亮度
 // 太空人动画相关
 int yuhangyuanAnimIndex = 0; // 太空人动画帧索引
 bool yuhangyuanAnimRunning = false; // 太空人动画是否运行
+// 指数页面相关
+bool indexPageInitialized = false; // 指数页面是否已初始化
+unsigned long lastIndexRefresh = 0; // 上次刷新指数数据的时间
 // JW01
 uint8_t packet[9];
 char tvoc[16] = "0.00";
@@ -825,6 +828,12 @@ void btn1LongClick(){
       }
       createFadeOnTask();
       break;  
+    case INDEXPAGE:
+      fadeOff();
+      currentPage = PAGE1;
+      drawPage1();
+      createFadeOnTask();
+      break;
     default:
       break;
   }
@@ -897,6 +906,12 @@ void btn3LongClick(){
       break;
     case CONFIG:
       fadeOff();
+      currentPage = INDEXPAGE;
+      drawIndexPage();
+      createFadeOnTask();
+      break;
+    case INDEXPAGE:
+      fadeOff();
       currentPage = PAGE1;
       drawPage1();
       createFadeOnTask();
@@ -965,6 +980,12 @@ void bootBtnClick(){
       createFadeOnTask();
       break;  
     case CONFIG:
+      fadeOff();
+      currentPage = INDEXPAGE;
+      drawIndexPage();
+      createFadeOnTask();
+      break;
+    case INDEXPAGE:
       fadeOff();
       currentPage = PAGE1;
       drawPage1();

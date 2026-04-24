@@ -5,8 +5,8 @@
 #include "net.h"
 #include "PreferencesUtil.h"
 #include "tftUtil.h"
-#include "stockAPI.h"
 #include "nowAPI.h"
+#include "stockAPI.h"
 
 /**
 CC温湿度仪  版本1.3
@@ -128,9 +128,11 @@ void setup(){
                   mode = ONLINE_MODE;
                 }
                 // 获取关注的股票数据
-                fetchWatchedStocks();
+                // fetchWatchedStocks();
                 // 获取全球指数数据
-                fetchGlobalIndex();
+                // fetchGlobalIndex();
+
+                displayStoredIndices();  // 只显示缓存数据
                 currentPage = PAGE1;
                 // 关闭加载动画
                 loadingAnim = false;
@@ -149,11 +151,17 @@ void setup(){
       }
     }
   }else{
-    // 测试代码
-    currentPage = PAGE1;
+    // 开发者模式 - 直接进入指数页面
+    initSPIFFS();
+    loadAllIndicesFromSPIFFS();
+    printAllIndices();
+    currentPage = INDEXPAGE;
     delay(1000);
     mode = ONLINE_MODE;
-    drawPage1();
+    indexPageInitialized = true;
+    lastIndexRefresh = millis();
+    drawIndexPage();
+    buttonEnable = true;
   }
   // 创建核心0的传感器任务
   createAnotherCoreTask();
@@ -281,6 +289,18 @@ void loop(){
       if((millis() - lastRefresh) >= 1000 || lastRefresh > millis()){
         drawTop();
         lastRefresh = millis();
+      }
+      break;
+    case INDEXPAGE:
+      if(!buttonEnable){
+        return;
+      }
+      if((millis() - lastIndexRefresh) >= 600000 || lastIndexRefresh > millis() || !indexPageInitialized){
+        fetchGlobalIndex();
+        loadAllIndicesFromSPIFFS();
+        drawIndexPage();
+        lastIndexRefresh = millis();
+        indexPageInitialized = true;
       }
       break;
     default:

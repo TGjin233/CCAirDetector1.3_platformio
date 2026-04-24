@@ -5,6 +5,7 @@
 #include "tftUtil.h"
 #include "Task.h"
 #include "net.h"
+#include "nowAPI.h"
 
 TFT_eSPI tft = TFT_eSPI();
 TFT_eSprite clk = TFT_eSprite(&tft);
@@ -1156,6 +1157,9 @@ void drawCurrentPage(){
       break;
     case CONFIG:
       drawConfig();
+      break;
+    case INDEXPAGE:
+      drawIndexPage();
       break;  
     default:
       break;
@@ -1166,6 +1170,113 @@ String week(int tm_wday){
   String wk[7] = {"日","一","二","三","四","五","六"};
   String s = "星期" + wk[tm_wday];
   return s;
+}
+
+void drawIndexPage(){
+  tft.fillScreen(backFillColor);
+  drawTop();
+  
+  int yPos = 25;
+  int itemHeight = 38;
+  
+  for(int i = 0; i < WATCHED_INDICES_COUNT && i < 5; i++){
+    IndexData& data = globalIndexData[i];
+    
+    if(data.lastPrice <= 0){
+      continue;
+    }
+    
+    clk.createSprite(270, 16);
+    clk.fillSprite(backFillColor);
+    clk.setTextDatum(TL_DATUM);
+    clk.setTextColor(penColor);
+    clk.loadFont(index16_16);
+    clk.drawString(data.inxnm, 5, 1);
+    clk.unloadFont();
+    clk.setTextColor(tft.color565(100, 100, 100));
+    clk.loadFont(page2sensor_16);
+    String uptimeStr = "";
+    if(data.uptime.length() >= 16){
+      uptimeStr = " " + data.uptime.substring(11, 16);
+    }
+    clk.drawString(uptimeStr, 95, 1);
+    clk.unloadFont();
+    clk.pushSprite(5, yPos+2);
+    clk.deleteSprite();
+    
+    clk.createSprite(150, 16);
+    clk.fillSprite(backFillColor);
+    clk.setTextDatum(TR_DATUM);
+    clk.setTextColor(penColor);
+    clk.loadFont(page2sensor_16);
+    String priceStr = String(data.lastPrice, 2);
+    clk.drawString(priceStr, 145, 1);
+    clk.unloadFont();
+    clk.pushSprite(165, yPos);
+    clk.deleteSprite();
+    
+    float riseFallPer = data.riseFallPer.toFloat();
+    uint16_t riseFallColor;
+    if(riseFallPer > 0){
+      riseFallColor = TFT_RED;
+    }else if(riseFallPer < 0){
+      riseFallColor = 0x07E0;
+    }else{
+      riseFallColor = penColor;
+    }
+    
+    String changeStr = "";
+    if(riseFallPer > 0){
+      changeStr = "+" + data.riseFallPer + " ▲";
+    }else if(riseFallPer < 0){
+      changeStr = data.riseFallPer + " ▼";
+    }else{
+      changeStr = data.riseFallPer;
+    }
+    
+    clk.createSprite(160, 16);
+    clk.fillSprite(backFillColor);
+    clk.setTextDatum(TL_DATUM);
+    clk.setTextColor(riseFallColor);
+    clk.loadFont(page2sensor_16);
+    clk.drawString(changeStr, 5, 1);
+    clk.unloadFont();
+    clk.pushSprite(5, yPos + 18);
+    clk.deleteSprite();
+    
+    String riseFallStr = "";
+    if(data.riseFall > 0){
+      riseFallStr = "+" + String(data.riseFall, 2);
+    }else{
+      riseFallStr = String(data.riseFall, 2);
+    }
+    
+    clk.createSprite(150, 16);
+    clk.fillSprite(backFillColor);
+    clk.setTextDatum(TR_DATUM);
+    clk.setTextColor(riseFallColor);
+    clk.loadFont(page2sensor_16);
+    clk.drawString(riseFallStr, 145, 1);
+    clk.unloadFont();
+    clk.pushSprite(165, yPos + 18);
+    clk.deleteSprite();
+    
+    tft.drawFastHLine(5, yPos + itemHeight - 2, 310, tft.color565(60, 60, 60));
+    
+    yPos += itemHeight;
+  }
+  
+  clk.createSprite(320, 18);
+  clk.fillSprite(backFillColor);
+  clk.loadFont(page2sensor_16);
+  clk.setTextDatum(CC_DATUM);
+  clk.setTextColor(tft.color565(100, 100, 100));
+  clk.drawString("← 上一页    下一页 →", 160, 9);
+  clk.unloadFont();
+  clk.pushSprite(0, 222);
+  clk.deleteSprite();
+  
+  clk.deleteSprite();
 }
 //处理月日
 String monthDay(int tm_mon, int tm_mday){

@@ -72,6 +72,10 @@
 #include "fonts/batteryNum_14.h"
 #include "fonts/calendar_22.h"
 #include "fonts/calendar_18.h"
+#include "fonts/index22_22.h"
+#include "fonts/index16_16.h"
+
+
 
 #define DEVELOP_MODE  false
 #define NTP   "ntp5.aliyun.com"
@@ -100,7 +104,7 @@ const String nowURL = "/v7/weather/now";  // 实时天气接口
 const String airURL = "/airquality/v1/current/";  // 空气质量接口
 // 页面枚举
 enum CurrentPage{
-  SETTING, PAGE1, PAGE2, PAGE3, CALENDAR, BONGOCAT, YUHANGYUAN, CONFIG
+  SETTING, PAGE1, PAGE2, PAGE3, CALENDAR, BONGOCAT, YUHANGYUAN, CONFIG, INDEXPAGE
 };
 // 定义结构体
 typedef struct {
