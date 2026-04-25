@@ -295,8 +295,11 @@ void loop(){
       if(!buttonEnable){
         return;
       }
+      if((millis() - lastRefresh) >= 60000 || lastRefresh > millis()){
+        drawTop();
+        lastRefresh = millis();
+      }
       if((millis() - lastIndexRefresh) >= 600000 || lastIndexRefresh > millis() || !indexPageInitialized){
-        fetchGlobalIndex();
         loadAllIndicesFromSPIFFS();
         drawIndexPage();
         lastIndexRefresh = millis();

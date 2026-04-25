@@ -1227,9 +1227,9 @@ void drawIndexPage(){
     
     String changeStr = "";
     if(riseFallPer > 0){
-      changeStr = "+" + data.riseFallPer + " ▲";
+      changeStr = "+" + data.riseFallPer + " ↑";
     }else if(riseFallPer < 0){
-      changeStr = data.riseFallPer + " ▼";
+      changeStr = data.riseFallPer + " ↓";
     }else{
       changeStr = data.riseFallPer;
     }
@@ -1238,7 +1238,7 @@ void drawIndexPage(){
     clk.fillSprite(backFillColor);
     clk.setTextDatum(TL_DATUM);
     clk.setTextColor(riseFallColor);
-    clk.loadFont(page2sensor_16);
+    clk.loadFont(page2sensor_me_16);
     clk.drawString(changeStr, 5, 1);
     clk.unloadFont();
     clk.pushSprite(5, yPos + 18);
@@ -1268,15 +1268,14 @@ void drawIndexPage(){
   
   clk.createSprite(320, 18);
   clk.fillSprite(backFillColor);
-  clk.loadFont(page2sensor_16);
+  clk.loadFont(page2sensor_me_16);
   clk.setTextDatum(CC_DATUM);
-  clk.setTextColor(tft.color565(100, 100, 100));
+  clk.setTextColor(tft.color565(100, 100, 100));  
   clk.drawString("← 上一页    下一页 →", 160, 9);
   clk.unloadFont();
   clk.pushSprite(0, 222);
   clk.deleteSprite();
   
-  clk.deleteSprite();
 }
 //处理月日
 String monthDay(int tm_mon, int tm_mday){

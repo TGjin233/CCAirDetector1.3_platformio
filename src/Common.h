@@ -74,6 +74,7 @@
 #include "fonts/calendar_18.h"
 #include "fonts/index22_22.h"
 #include "fonts/index16_16.h"
+#include "fonts/page2sensor_me_16.h"
 
 
 

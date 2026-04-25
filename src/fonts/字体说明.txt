@@ -9,6 +9,7 @@ pollutantName_18   (阿里巴巴普惠体-Bold)			相对湿度温度
 page1Num_64       （Goldman-Regular）			
 page1Num_35       （Goldman-Regular）
 page2sensor_16  	(阿里巴巴普惠体-Medium)			湿度温度日一二三四五六
+
 page2SensorNum_22  (阿里巴巴普惠体-SemiBold)
 page3Num_90        (阿里巴巴普惠体-Bold) 
 configTitle_26       (阿里巴巴普惠体-Heavy)          设置℃%
