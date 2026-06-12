@@ -69,7 +69,7 @@ const char* WATCHED_INDICES[] = {
 
 ## 致谢
 
-- 原作者：[大聪明的二手脑袋](https://space.bilibili.com/xxxxx)
+- 原作者：[大聪明的二手脑袋](https://space.bilibili.com/393773788?spm_id_from=333.788.upinfo.head.click)
 - 原视频：[CC温湿度仪1.2版本](https://www.bilibili.com/video/BV1yz421B7Bi/)
 
 ## 许可证
