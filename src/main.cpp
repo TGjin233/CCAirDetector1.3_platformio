@@ -127,12 +127,10 @@ void setup(){
                 if(queryWeatherSuccess && queryAirSuccess){
                   mode = ONLINE_MODE;
                 }
-                // 获取关注的股票数据
-                // fetchWatchedStocks();
-                // 获取全球指数数据
-                // fetchGlobalIndex();
+                // 获取全球指数数据（内置频率限制，缓存有效时跳过请求）
+                fetchGlobalIndex();
 
-                displayStoredIndices();  // 只显示缓存数据
+                displayStoredIndices();  // 显示缓存数据
                 currentPage = PAGE1;
                 // 关闭加载动画
                 loadingAnim = false;
@@ -151,13 +149,28 @@ void setup(){
       }
     }
   }else{
-    // 开发者模式 - 直接进入指数页面
+    // 开发者模式 - 先连接WiFi再获取数据
     initSPIFFS();
-    loadAllIndicesFromSPIFFS();
+    
+    // 尝试连接WiFi（使用已保存的配置）
+    if(ssid.length() > 0 && pass.length() > 0) {
+      connectWiFi(15);  // 15秒超时
+      if(connected) {
+        logInfoln("开发者模式：WiFi连接成功");
+        fetchGlobalIndex();  // 获取指数数据
+      } else {
+        logInfoln("开发者模式：WiFi连接失败，使用缓存数据");
+        loadAllIndicesFromSPIFFS();
+      }
+    } else {
+      logInfoln("开发者模式：未配置WiFi，使用缓存数据");
+      loadAllIndicesFromSPIFFS();
+    }
+    
     printAllIndices();
     currentPage = INDEXPAGE;
     delay(1000);
-    mode = ONLINE_MODE;
+    mode = connected ? ONLINE_MODE : OFFLINE_MODE;
     indexPageInitialized = true;
     lastIndexRefresh = millis();
     drawIndexPage();
@@ -299,8 +312,10 @@ void loop(){
         drawTop();
         lastRefresh = millis();
       }
+      // 每10分钟尝试刷新指数数据
       if((millis() - lastIndexRefresh) >= 600000 || lastIndexRefresh > millis() || !indexPageInitialized){
-        loadAllIndicesFromSPIFFS();
+        // 尝试从API获取最新数据（内置频率限制和缓存检查）
+        fetchGlobalIndex();
         drawIndexPage();
         lastIndexRefresh = millis();
         indexPageInitialized = true;

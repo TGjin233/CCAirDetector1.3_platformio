@@ -78,7 +78,7 @@
 
 
 
-#define DEVELOP_MODE  false
+#define DEVELOP_MODE  true
 #define NTP   "ntp5.aliyun.com"
 #define HTTP_RET_OK  200
 #define ONLINE_MODE   0

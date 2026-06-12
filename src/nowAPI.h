@@ -4,15 +4,20 @@
 #include <HTTPClient.h>
 #include <ArduinoJson.h>
 #include "Common.h"
+// http://121.40.168.132/
+// 自建服务器配置
+#define STOCK_API_HOST "121.40.168.132"
+#define STOCK_API_PORT 8000
+#define STOCK_API_TOKEN "stock-api-token-2024"
+#define STOCK_API_INDEX_URL "/api/index"
 
-// NowAPI配置
-#define NOWAPI_HOST "sapi.k780.com"
-#define NOWAPI_APPKEY "79063"
-#define NOWAPI_SIGN "7328f4ca82939be6741f091daff4ef4f"
+// API频率限制配置
+#define INDEX_API_MAX_PER_HOUR  10    // 每小时最大请求次数
+#define INDEX_API_MIN_INTERVAL  60000  // 最小请求间隔(ms) = 1分钟
 
 // 指数数据相关
 struct IndexData {
-  String inxid;           // 指数编号
+  String inxid;           // 指数编号 (如 sh000001)
   String inxnm;           // 指数名称
   float lastPrice;        // 当前价
   float riseFall;         // 涨跌额
@@ -20,7 +25,7 @@ struct IndexData {
   float openPrice;        // 开盘价
   float highPrice;        // 最高价
   float lowPrice;         // 最低价
-  float yesyPrice;       // 昨日收盘价
+  float yesyPrice;        // 昨日收盘价
   String amplitude;       // 振幅
   float volume;           // 成交量
   float turnover;         // 成交额
@@ -34,12 +39,12 @@ extern const int WATCHED_INDICES_COUNT;
 extern IndexData globalIndexData[];
 
 // 函数声明
-void fetchGlobalIndex();
-void fetchSingleIndex(const char* inxid, IndexData& data, int index);
-void displayStoredIndices();  // 只显示缓存数据
-void loadAllIndicesFromSPIFFS();  // 从SPIFFS加载所有指数数据
+void fetchGlobalIndex();       // 获取所有指数数据（单次请求）
+void displayStoredIndices();   // 只显示缓存数据（不发起网络请求）
+void loadAllIndicesFromSPIFFS();
 void printIndexData(const IndexData& data);
 void printAllIndices();
 void initSPIFFS();
+unsigned long getIndexLastFetchTime();
 
 #endif
